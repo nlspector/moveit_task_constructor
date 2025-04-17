@@ -203,10 +203,10 @@ bool PickPlaceTask::init(const rclcpp::Node::SharedPtr& node, const pick_place_t
 			stage->properties().configureInitFrom(Stage::PARENT, { "group" });  // inherit group from parent stage
 			stage->setMinMaxDistance(params.approach_object_min_dist, params.approach_object_max_dist);
 
-			// Set hand forward direction
+			// Set hand BACKWARD direction (negative Z)
 			geometry_msgs::msg::Vector3Stamped vec;
 			vec.header.frame_id = params.hand_frame;
-			vec.vector.z = 1.0;
+			vec.vector.z = -1.0; // REVERSED
 			stage->setDirection(vec);
 			grasp->insert(std::move(stage));
 		}
@@ -418,9 +418,10 @@ bool PickPlaceTask::init(const rclcpp::Node::SharedPtr& node, const pick_place_t
 			stage->setMinMaxDistance(.12, .25);
 			stage->setIKFrame(params.hand_frame);
 			stage->properties().set("marker_ns", "retreat");
+			// Set hand FORWARD direction (positive Z)
 			geometry_msgs::msg::Vector3Stamped vec;
 			vec.header.frame_id = params.hand_frame;
-			vec.vector.z = -1.0;
+			vec.vector.z = 1.0; // REVERSED
 			stage->setDirection(vec);
 			place->insert(std::move(stage));
 		}

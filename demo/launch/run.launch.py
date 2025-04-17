@@ -9,8 +9,8 @@ from moveit_configs_utils import MoveItConfigsBuilder
 
 def generate_launch_description():
     moveit_config = (
-        MoveItConfigsBuilder("moveit_resources_panda")
-        .robot_description(file_path="config/panda.urdf.xacro")
+        MoveItConfigsBuilder(robot_name="final_config", package_name="final_config")
+        .robot_description("/home/noahspector/ws_moveit/src/final_config/config/URDF_REV_3.urdf.xacro")
         .to_moveit_configs()
     )
 

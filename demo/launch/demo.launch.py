@@ -9,10 +9,10 @@ from moveit_configs_utils import MoveItConfigsBuilder
 
 def generate_launch_description():
     moveit_config = (
-        MoveItConfigsBuilder("moveit_resources_panda")
+        MoveItConfigsBuilder(robot_name="final_config", package_name="final_config")
+        .robot_description("/home/noahspector/ws_moveit/src/final_config/config/URDF_REV_3.urdf.xacro")
         .planning_pipelines(pipelines=["ompl"])
-        .robot_description(file_path="config/panda.urdf.xacro")
-        .trajectory_execution(file_path="config/gripper_moveit_controllers.yaml")
+        .trajectory_execution(file_path="config/moveit_controllers.yaml")
         .to_moveit_configs()
     )
 
@@ -54,7 +54,7 @@ def generate_launch_description():
         executable="static_transform_publisher",
         name="static_transform_publisher",
         output="log",
-        arguments=["0.0", "0.0", "0.0", "0.0", "0.0", "0.0", "world", "panda_link0"],
+        arguments=["0.0", "0.0", "0.0", "0.0", "0.0", "0.0", "world", "base_link"],
     )
 
     # Publish TF
@@ -68,7 +68,7 @@ def generate_launch_description():
 
     # ros2_control using FakeSystem as hardware
     ros2_controllers_path = os.path.join(
-        get_package_share_directory("moveit_resources_panda_moveit_config"),
+        get_package_share_directory("final_config"),
         "config",
         "ros2_controllers.yaml",
     )
@@ -82,8 +82,8 @@ def generate_launch_description():
     # Load controllers
     load_controllers = []
     for controller in [
-        "panda_arm_controller",
-        "panda_hand_controller",
+        "final_arm_controller",
+        "gripper_controller",
         "joint_state_broadcaster",
     ]:
         load_controllers += [
