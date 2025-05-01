@@ -73,6 +73,10 @@ pick_place_task_demo:
     type: string
     validation:
       not_empty<>: []
+  base_link_frame:
+    type: string
+    validation:
+      not_empty<>: []
   surface_link:
     type: string
     validation:

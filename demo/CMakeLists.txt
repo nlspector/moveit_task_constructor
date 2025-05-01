@@ -6,10 +6,16 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 find_package(ament_cmake REQUIRED)
-
-find_package(generate_parameter_library REQUIRED)
+find_package(rclcpp REQUIRED)
+find_package(moveit_ros_planning_interface REQUIRED)
+find_package(moveit_task_constructor_core REQUIRED)
+find_package(moveit_task_constructor_msgs REQUIRED)
 find_package(moveit_common REQUIRED)
-moveit_package()
+find_package(tf2_eigen REQUIRED)
+find_package(yaml_cpp_vendor REQUIRED)
+find_package(generate_parameter_library REQUIRED)
+find_package(grasp_msgs REQUIRED)
+
 find_package(moveit_core REQUIRED)
 find_package(moveit_ros_planning REQUIRED)
 find_package(moveit_ros_planning_interface REQUIRED)
@@ -26,14 +32,27 @@ set(THIS_PACKAGE_INCLUDE_DEPENDS
 	moveit_task_constructor_msgs
 	rclcpp
 	tf2_eigen
+	grasp_msgs
 )
 
-add_library(${PROJECT_NAME}_pick_place_task SHARED src/pick_place_task.cpp)
-ament_target_dependencies(${PROJECT_NAME}_pick_place_task ${THIS_PACKAGE_INCLUDE_DEPENDS})
-install(TARGETS ${PROJECT_NAME}_pick_place_task
-	ARCHIVE DESTINATION lib
-	LIBRARY DESTINATION lib
-	RUNTIME DESTINATION lib/${PROJECT_NAME})
+add_library(moveit_task_constructor_demo_pick_place_task
+  src/pick_place_task.cpp
+  src/grasp_provider.cpp
+)
+target_include_directories(moveit_task_constructor_demo_pick_place_task
+  PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:include>
+)
+ament_target_dependencies(moveit_task_constructor_demo_pick_place_task
+  rclcpp
+  moveit_ros_planning_interface
+  moveit_task_constructor_core
+  moveit_common
+  tf2_eigen
+  ${moveit_task_constructor_demo_parameters_TARGETS}
+  grasp_msgs
+)
 
 include_directories(include)
 
