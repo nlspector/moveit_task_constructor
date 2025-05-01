@@ -103,7 +103,7 @@ void GraspProvider::compute()
 		// Assuming convention: X=binormal, Y=axis, Z=-approach
 		Eigen::Vector3d binormal(grasp.binormal.x, grasp.binormal.y, grasp.binormal.z);
 		Eigen::Vector3d axis(grasp.axis.x, grasp.axis.y, grasp.axis.z);
-		Eigen::Vector3d neg_approach(-grasp.approach.x, -grasp.approach.y, -grasp.approach.z); // Invert approach
+		Eigen::Vector3d neg_approach(grasp.approach.x, grasp.approach.y, grasp.approach.z); // Invert approach
 
 		// Normalize vectors
 		binormal.normalize();
@@ -112,9 +112,9 @@ void GraspProvider::compute()
 
 		// Create rotation matrix
 		tf2::Matrix3x3 rotation_matrix;
-		rotation_matrix.setValue(binormal.x(), axis.x(), neg_approach.x(),
-		                         binormal.y(), axis.y(), neg_approach.y(),
-		                         binormal.z(), axis.z(), neg_approach.z());
+		rotation_matrix.setValue(neg_approach.x(), binormal.x(), axis.x(),
+		                         neg_approach.y(), binormal.y(), axis.y(),
+		                         neg_approach.z(), binormal.z(), axis.z());
 
 		// Convert to Quaternion
 		tf2::Quaternion quaternion;
